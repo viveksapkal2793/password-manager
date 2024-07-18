@@ -19,6 +19,11 @@ npm install
 
 - Install the other dependencies and modules given below using npm
 
+- Run the server on localhost
+```
+node --watch server.js
+```
+
 - Then run the following command to start the website on localhost
 ```
 npm run dev
