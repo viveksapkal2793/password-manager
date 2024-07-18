@@ -4,7 +4,7 @@
 
 ### Dependencies: 
 
-"react": "^18.3.1",
+- "react": "^18.3.1",
 "react-dom": "^18.3.1",
 "react-toastify": "^10.0.5",
 "uuid": "^10.0.0"
