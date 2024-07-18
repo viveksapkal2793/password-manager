@@ -10,7 +10,7 @@ npm create vite@latest
 ```
 This will create a file and directories structure
 
-- To install and use Tailwind CSS go the this [link][https://tailwindcss.com/docs/guides/vite] and run the necessary commands and make required changes in tailwind.config.js file.
+- To install and use Tailwind CSS go the this {https://tailwindcss.com/docs/guides/vite}[link] and run the necessary commands and make required changes in tailwind.config.js file.
 
 ### Dependencies: 
 ```
