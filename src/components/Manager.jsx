@@ -13,14 +13,16 @@ const Manager = () => {
 
   const [passwordArray, setpasswordArray] = useState([])
 
-  useEffect(() => {
-    let passwords = localStorage.getItem("passwords");
-    if (passwords) {
-      setpasswordArray(JSON.parse(passwords))
-    }
-    else {
+  const getPasswords = async () => {
 
-    }
+    let req = await fetch("http://localhost:3000/")
+    let passwords = await req.json()
+    setpasswordArray(passwords)
+  }
+
+  useEffect(() => {
+    getPasswords()
+
   }, [])
 
   const copyText = (text) => {
@@ -48,12 +50,25 @@ const Manager = () => {
     }
   }
 
-  const savePassword = () => {
+  const savePassword = async () => {
 
-    if(form.site.length > 3 && form.username.length > 3 && form.password.length > 3){
+    if (form.site.length > 3 && form.username.length > 3 && form.password.length > 3) {
+
+      // if any such id exists in the database then delete it
+      await fetch("http://localhost:3000/", {
+        method: "DELETE", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: form.id })
+      })
+
+      setpasswordArray([...passwordArray, { ...form, id: uuidv4() }])
       
-      setpasswordArray([...passwordArray, {...form, id: uuidv4()}])
-      localStorage.setItem("passwords", JSON.stringify([...passwordArray, {...form, id: uuidv4()}]))
+      let res = await fetch("http://localhost:3000/", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...form, id: uuidv4() })
+      })
+
+      // localStorage.setItem("passwords", JSON.stringify([...passwordArray, { ...form, id: uuidv4() }]))
+
       setform({ site: "", username: "", password: "" })
       toast('Password saved !', {
         position: "top-right",
@@ -66,7 +81,7 @@ const Manager = () => {
         theme: "light",
       });
     }
-    else{
+    else {
       toast('Min length of all fields must be 4!', {
         position: "top-right",
         autoClose: 3000,
@@ -80,12 +95,19 @@ const Manager = () => {
     }
   }
 
-  const deletePassword = (id) => {
+  const deletePassword = async (id) => {
 
     let c = confirm("Are you sure you want to delete this password?")
-    if(c){
+    if (c) {
       setpasswordArray(passwordArray.filter((item) => item.id !== id))
-      localStorage.setItem("passwords", JSON.stringify(passwordArray.filter((item) => item.id !== id)))
+
+      let res = await fetch("http://localhost:3000/", {
+        method: "DELETE", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: id })
+      })
+
+      // localStorage.setItem("passwords", JSON.stringify(passwordArray.filter((item) => item.id !== id)))
+
       toast('Password deleted !', {
         position: "top-right",
         autoClose: 3000,
@@ -97,12 +119,13 @@ const Manager = () => {
         theme: "light",
       });
     }
-  } 
+  }
 
   const editPassword = (id) => {
 
-    setform(passwordArray.filter((item) => item.id === id)[0])
+    setform({...passwordArray.filter((item) => item.id === id)[0], id: id})
     setpasswordArray(passwordArray.filter((item) => item.id !== id))
+
   }
 
   const handleChange = (e) => {
@@ -139,15 +162,15 @@ const Manager = () => {
 
         <div className='flex flex-col p-4 text-black gap-4 items-center'>
 
-          <input onChange={handleChange} className="rounded-full border border-blue-800 w-full p-4 py-1 font-mono" placeholder='Website url' type="text" name="site" value={form.site} id='site'/>
+          <input onChange={handleChange} className="rounded-full border border-blue-800 w-full p-4 py-1 font-mono" placeholder='Website url' type="text" name="site" value={form.site} id='site' />
 
           <div className='flex flex-col md:flex-row w-full gap-4 justify-center'>
 
-            <input onChange={handleChange} className="rounded-full border border-blue-800 w-full p-4 py-1 font-mono" placeholder='Username' type="text" name="username" value={form.username} id='username'/>
+            <input onChange={handleChange} className="rounded-full border border-blue-800 w-full p-4 py-1 font-mono" placeholder='Username' type="text" name="username" value={form.username} id='username' />
 
             <div className="relative">
 
-              <input onChange={handleChange} ref={passwordRef} className="rounded-full border border-blue-800 w-full p-4 py-1 font-mono" placeholder='Password' type="password" name="password" value={form.password} id='password'/>
+              <input onChange={handleChange} ref={passwordRef} className="rounded-full border border-blue-800 w-full p-4 py-1 font-mono" placeholder='Password' type="password" name="password" value={form.password} id='password' />
               <span className='absolute right-1 top-[1px] cursor-pointer' onClick={showPassword}>
                 <img className='p-1' width={30} ref={ref} src='icons/eye.png' alt="eye" />
               </span>
@@ -203,7 +226,7 @@ const Manager = () => {
                     </td>
                     <td className='text-center py-2 border border-blue-900'>
                       <div className='flex justify-center items-center flex-col sm:flex-row break-all'>
-                        <span>{item.password}</span>
+                        <span>{"*".repeat(item.password.length)}</span>
                         <div className='lordiconcopy cursor-pointer' onClick={() => { copyText(item.password) }}>
                           <lord-icon style={{ "width": "28px", "height": "28px", "marginLeft": "8px", "marginTop": "9px" }}
                             src="https://cdn.lordicon.com/ylvuooxd.json"
@@ -214,15 +237,15 @@ const Manager = () => {
                     </td>
                     <td className='text-center py-2 border border-blue-900'>
                       <div className='flex justify-center items-center gap-1 md:gap-5 flex-col sm:flex-row'>
-                        <span onClick={()=>(deletePassword(item.id))}>
-                          <lord-icon style={{ "width": "28px", "height": "28px", "marginLeft": "8px", "marginTop": "9px", "cursor":"pointer"}}
+                        <span onClick={() => (deletePassword(item.id))}>
+                          <lord-icon style={{ "width": "28px", "height": "28px", "marginLeft": "8px", "marginTop": "9px", "cursor": "pointer" }}
                             src="https://cdn.lordicon.com/skkahier.json"
                             trigger="hover"
                             colors="primary:#e83a30">
                           </lord-icon>
                         </span>
-                        <span onClick={()=>(editPassword(item.id))}>
-                          <lord-icon style={{ "width": "28px", "height": "28px", "marginLeft": "8px", "marginTop": "9px", "cursor":"pointer"}}
+                        <span onClick={() => (editPassword(item.id))}>
+                          <lord-icon style={{ "width": "28px", "height": "28px", "marginLeft": "8px", "marginTop": "9px", "cursor": "pointer" }}
                             src="https://cdn.lordicon.com/vhyuhmbl.json"
                             trigger="hover"
                             colors="primary:#ebe6ef,secondary:#ffc738,tertiary:#16c72e">
