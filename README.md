@@ -10,7 +10,19 @@ npm create vite@latest
 ```
 This will create a file and directories structure
 
-- To install and use Tailwind CSS go the this {https://tailwindcss.com/docs/guides/vite}[link] and run the necessary commands and make required changes in tailwind.config.js file.
+- Then run the followind command to install node modules
+```
+npm install
+```
+
+- To install and use Tailwind CSS go the this [link](https://tailwindcss.com/docs/guides/vite) and run the necessary commands and make required changes in tailwind.config.js file.
+
+- Install the other dependencies and modules given below using npm
+
+- Then run the following command to start the website on localhost
+```
+npm run dev
+```
 
 ### Dependencies: 
 ```
