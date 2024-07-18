@@ -2,6 +2,16 @@
 
 ### Tech satck used: HTML, Tailwind CSS, React JS, node.js, express.js, vite.
 
+### Setup and Initialization:
+
+- Create a directory for the project and run the command:
+```
+npm create vite@latest
+```
+This will create a file and directories structure
+
+- To install and use Tailwind CSS go the this [link][https://tailwindcss.com/docs/guides/vite] and run the necessary commands and make required changes in tailwind.config.js file.
+
 ### Dependencies: 
 ```
 "react": "^18.3.1",
