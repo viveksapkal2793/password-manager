@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .mycontainer {
+    @apply container px-40 py-8 mx-auto;
+  }
+}  
+
+@layer components {
+  .smallcontainer {
+    @apply container px-4 py-2 mx-4;
+  }
+}  
