@@ -1,6 +1,8 @@
 # PassMan - A password manager web application
 
-### Tech satck used: HTML, Tailwind CSS, React JS, node.js, express.js, vite.
+A password manager web application built using the following tech stack. The web application supports saving, editing and deleting passwords on local storage as well as local database. The web application is responsive with a minimalist UI providing seamless user interaction. Icons in the project have been used from [lord icons site](https://lordicon.com/icons/wired/flat?f=free). 
+
+### Tech satck used: HTML, Tailwind CSS, React JS, node.js, express.js, MongoDB, vite.
 
 ### Setup and Initialization:
 
